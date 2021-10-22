@@ -22,3 +22,24 @@ __builtins__['reload'] = importlib.reload
 
 def testprint(string):
     print(string + "00100")
+
+# -----------------------------------------------------------
+# LOG SELECTED ACTORS ))))))))))))))))))))))))))))))))) START
+# -----------------------------------------------------------
+
+def logSelectedActors():
+    """Log names of selected scene actors to console."""
+
+    @unreal.uclass()
+    class ueUtility(unreal.GlobalEditorUtilityBase):
+        pass
+
+    selectedActors = ueUtility().get_selection_set()
+
+    for actor in selectedActors:
+        unreal.log("Selected Actors:")
+        unreal.log(actor.get_name())
+
+# -----------------------------------------------------------
+# LOG SELECTED ACTORS ))))))))))))))))))))))))))))))))))) END
+# -----------------------------------------------------------
