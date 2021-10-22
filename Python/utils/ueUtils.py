@@ -43,3 +43,32 @@ def logSelectedActors():
 # -----------------------------------------------------------
 # LOG SELECTED ACTORS ))))))))))))))))))))))))))))))))))) END
 # -----------------------------------------------------------
+
+# -----------------------------------------------------------
+# REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))) START
+# -----------------------------------------------------------
+
+def rename_assets():
+    """"""
+
+    # Access UE's System Library to create class instances.
+    system_lib = unreal.SystemLibrary()
+    # Access UE's Editor Utility Library to perform operations
+    # within UE's Editor.
+    editor_util = unreal.EditorUtilityLibrary()
+    # Access UE's own String Library, to be used in lieu of
+    # default Python's string functions.
+    string_lib = unreal.StringLibrary()
+
+    # Collect the assets selected by user and log their count.
+    selected_assets = editor_util.get_selected_assets()
+    num_of_assets = len(selected_assets)
+    # Counter to track replaced assets.
+    replaced_assets = 0
+
+    # Debug log
+    unreal.log("Selected {} assets.".format(num_of_assets))
+
+# -----------------------------------------------------------
+# REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))} END
+# -----------------------------------------------------------
