@@ -23,11 +23,11 @@ __builtins__['reload'] = importlib.reload
 def testprint(string):
     print(string + "00100")
 
-# -----------------------------------------------------------
-# LOG SELECTED ACTORS ))))))))))))))))))))))))))))))))) START
-# -----------------------------------------------------------
 
 def logSelectedActors():
+    # -----------------------------------------------------------
+    # LOG SELECTED ACTORS ))))))))))))))))))))))))))))))))) START
+    # -----------------------------------------------------------
     """Log names of selected scene actors to console."""
 
     @unreal.uclass()
@@ -40,15 +40,16 @@ def logSelectedActors():
         unreal.log("Selected Actors:")
         unreal.log(actor.get_name())
 
-# -----------------------------------------------------------
-# LOG SELECTED ACTORS ))))))))))))))))))))))))))))))))))) END
-# -----------------------------------------------------------
+    # -----------------------------------------------------------
+    # LOG SELECTED ACTORS ))))))))))))))))))))))))))))))))))) END
+    # -----------------------------------------------------------
 
-# -----------------------------------------------------------
-# REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))) START
-# -----------------------------------------------------------
 
-def rename_assets():
+
+def rename_assets(search_pattern):
+    # -----------------------------------------------------------
+    # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))) START
+    # -----------------------------------------------------------
     """"""
 
     # Access UE's System Library to create class instances.
@@ -69,6 +70,24 @@ def rename_assets():
     # Debug log
     unreal.log("Selected {} assets.".format(num_of_assets))
 
-# -----------------------------------------------------------
-# REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))} END
-# -----------------------------------------------------------
+    # Iterate thru each selected asset and rename.
+    for asset in selected_assets:
+        # Get asset name as clear text. This is the display
+        # name for the asset as seen in the Content Browser.
+        asset_name = system_lib.get_object_name(asset)
+        # Debug log retrieved name.
+        unreal.log(asset_name)
+
+        # Check if asset name contains the string spec'd to
+        # be searched and replaced using UE's String Lib's
+        # contains() function. 3rd arg spec's if case-sensitive.
+        if string_lib.contains(asset_name, search_pattern, use_case = False):
+            unreal.log("Search pattern found in {}.".format(asset_name))
+        # Debug log for instances where search pattern was not
+        # found in selected assets' name.
+        else:
+            unreal.log("Search pattern not found in {}, therefore, skipped.".format(asset_name))
+
+    # -----------------------------------------------------------
+    # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))} END
+    # -----------------------------------------------------------
