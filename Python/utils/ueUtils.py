@@ -46,7 +46,7 @@ def logSelectedActors():
 
 
 
-def rename_assets(search_pattern):
+def rename_assets(search_pattern, replaced_pattern, case_sensitivity):
     # -----------------------------------------------------------
     # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))) START
     # -----------------------------------------------------------
@@ -81,12 +81,22 @@ def rename_assets(search_pattern):
         # Check if asset name contains the string spec'd to
         # be searched and replaced using UE's String Lib's
         # contains() function. 3rd arg spec's if case-sensitive.
-        if string_lib.contains(asset_name, search_pattern, use_case = False):
-            unreal.log("Search pattern found in {}.".format(asset_name))
+        if string_lib.contains(asset_name, search_pattern, use_case=case_sensitivity):
+            new_asset_name = string_lib.replace(asset_name, search_pattern, replaced_pattern)
+            # Aggregate replaced asset counter.
+            replaced_assets += 1
+            # Execute renaming operation using UE's Editor Utility
+            # rename_asset() function.
+            editor_util.rename_asset(asset, new_asset_name)
+            # Debug log for found search pattern and rename.
+            unreal.log("Search pattern found in {}, renamed to {}".format(asset_name, new_asset_name))
         # Debug log for instances where search pattern was not
         # found in selected assets' name.
         else:
             unreal.log("Search pattern not found in {}, therefore, skipped.".format(asset_name))
+
+    # Log number of selected assets that were successfully renamed.
+    unreal.log("Renamed {}/{} assets".format(replaced_assets, num_of_assets))
 
     # -----------------------------------------------------------
     # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))} END
