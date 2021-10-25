@@ -46,11 +46,24 @@ def logSelectedActors():
 
 
 
-def rename_assets(search_pattern, replaced_pattern, case_sensitivity):
+def rename_assets(search_pattern, replaced_pattern, case_sensitivity=True):
     # -----------------------------------------------------------
     # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))) START
     # -----------------------------------------------------------
-    """"""
+    r"""
+        Replace search pattern in selected assets with new string.
+
+        Args:
+            search_pattern:
+                string
+            replaced_pattern:
+                string
+            case_sensitivity:
+                bool
+
+        Returns:
+            None
+    """
 
     # Access UE's System Library to create class instances.
     system_lib = unreal.SystemLibrary()
@@ -82,7 +95,14 @@ def rename_assets(search_pattern, replaced_pattern, case_sensitivity):
         # be searched and replaced using UE's String Lib's
         # contains() function. 3rd arg spec's if case-sensitive.
         if string_lib.contains(asset_name, search_pattern, use_case=case_sensitivity):
-            new_asset_name = string_lib.replace(asset_name, search_pattern, replaced_pattern)
+            # Specify new asset name by replacing matched search
+            # pattern with new replaced pattern. Note that replace()
+            # function includes arg to specify case sensitivity
+            # with UE's SearchCase enum. Case enum toggles between
+            # user spec'd use_case arg.
+            # Ref: https://docs.unrealengine.com/4.27/en-US/PythonAPI/class/SearchCase.html
+            case_enum = unreal.SearchCase.CASE_SENSITIVE if case_sensitivity else unreal.SearchCase.IGNORE_CASE
+            new_asset_name = string_lib.replace(asset_name, search_pattern, replaced_pattern, search_case=case_enum)
             # Aggregate replaced asset counter.
             replaced_assets += 1
             # Execute renaming operation using UE's Editor Utility
