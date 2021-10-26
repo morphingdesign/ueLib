@@ -121,3 +121,78 @@ def rename_assets(search_pattern, replaced_pattern, case_sensitivity=True):
     # -----------------------------------------------------------
     # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))} END
     # -----------------------------------------------------------
+
+
+
+
+def org_world_outliner():
+    # -----------------------------------------------------------
+    # ORGANIZE WORLD OUTLINER ))))))))))))))))))))))))))))) START
+    # -----------------------------------------------------------
+    r"""
+        Organize world outliner based on actor type and categorize
+        into corresponding folders.
+
+        Args:
+            None
+
+        Returns:
+            None
+    """
+
+    # Access UE's Editor Level & Filter Libraries to access level
+    # content.
+    editor_level_lib = unreal.EditorLevelLibrary()
+    editor_filter_lib = unreal.EditorFilterLibrary()
+
+    # Retrieve all actors in current level; store in array.
+    actors = editor_level_lib.get_all_level_actors()
+
+    # Filter thru array and isolate by class. Each filter focuses
+    # on each type of actor being isolated, such as by class, string
+    # or other method.
+    static_mesh = editor_filter_lib.by_class(actors, unreal.StaticMeshActor)
+    lighting = editor_filter_lib.by_class(actors, unreal.Light)
+    # Rather than by class, filter BP's by string in name.
+    blueprint = editor_filter_lib.by_id_name(actors, "BP")
+    # For tagged actors, specify the tag as a Name object and spec
+    # Filter Type. If set to 'INCLUDE', then it will only include
+    # actors with the spec'd tag. With 'EXCLUDE', all non-tagged
+    # actors will be assigned to array variable.
+    tag_name = unreal.Name("tagged")
+    tagged = editor_filter_lib.by_actor_tag(actors, tag_name, filter_type=unreal.EditorScriptingFilterType.INCLUDE)
+    untagged = editor_filter_lib.by_actor_tag(actors, tag_name, filter_type=unreal.EditorScriptingFilterType.EXCLUDE)
+
+    # Counter to track number of moved actors.
+    moved_actors = 0
+
+    # Create map that matches spec'd folder names to each of the
+    # filters created above.
+    folders = {
+        "StaticMesh": static_mesh,
+        "Lighting": lighting,
+        "BP": blueprint,
+        "Tagged": tagged,
+        "Untagged": untagged
+    }
+
+    # Iterate thru each folder within the map.
+    for folder_name in folders:
+        # Iterate thru each actor based on folder name.
+        for actor in folders[folder_name]:
+            # Get name of spec'd actor instance.
+            actor_name = actor.get_fname()
+            # Redefine the path to the actor so that it is now
+            # within its respective folder, as spec'd in the arg.
+            #actor.set_folder_path(folder_name)
+            unreal.log("{} moved into {} folder.".format(actor_name, folder_name))
+
+            # Aggregate actors moved into folder.
+            moved_actors += 1
+
+    # Debug log total number of actors moved into folders.
+    unreal.log("Moved {} actors into folders.".format(moved_actors))
+
+    # -----------------------------------------------------------
+    # ORGANIZE WORLD OUTLINER ))))))))))))))))))))))))))))))} END
+    # -----------------------------------------------------------
