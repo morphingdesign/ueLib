@@ -65,7 +65,8 @@ def rename_assets(search_pattern, replaced_pattern, case_sensitivity=True):
             None
     """
 
-    # Access UE's System Library to create class instances.
+    # Instantiate classes
+    # Accessing UE's System Library.
     system_lib = unreal.SystemLibrary()
     # Access UE's Editor Utility Library to perform operations
     # within UE's Editor.
@@ -121,7 +122,6 @@ def rename_assets(search_pattern, replaced_pattern, case_sensitivity=True):
     # -----------------------------------------------------------
     # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))} END
     # -----------------------------------------------------------
-
 
 
 
@@ -195,4 +195,56 @@ def org_world_outliner():
 
     # -----------------------------------------------------------
     # ORGANIZE WORLD OUTLINER ))))))))))))))))))))))))))))))} END
+    # -----------------------------------------------------------
+
+
+
+def log_sm_components():
+    # -----------------------------------------------------------
+    # LOG STATIC MESH COMPONENTS )))))))))))))))))))))))))) START
+    # -----------------------------------------------------------
+    r"""
+        Access static meshes within filtered actors and log names.
+
+        Args:
+            None
+
+        Returns:
+            None
+    """
+
+    # Access UE's Editor Level & Filter Libraries to access level
+    # content.
+    editor_level_lib = unreal.EditorLevelLibrary()
+    editor_filter_lib = unreal.EditorFilterLibrary()
+
+    # Retrieve all actors in current level; store in array.
+    actors = editor_level_lib.get_all_level_actors()
+
+    # Isolate and store only static mesh actors.
+    #static_mesh_actors = editor_filter_lib.by_class(actors, unreal.StaticMeshActor)
+    static_mesh_actors = editor_filter_lib.by_id_name(actors, "Wall", string_match=unreal.EditorScriptingStringMatchType.CONTAINS)
+
+    # Counter to track identified actors.
+    num_of_actors = 0
+
+    # Iterate thru each static mesh actor.
+    for actor in static_mesh_actors:
+        #
+        sm_component = actor.static_mesh_component
+        sm = sm_component.static_mesh
+        # The ".static_mesh" object is returned, such as:
+        #   <Object '/Game/Geometry/Meshes/1M_Cube.1M_Cube' (0x0000021A400C2800) Class 'StaticMesh'>
+        # Use unreal._ObjectBase Library to get name, which returns:
+        #   1M_Cube
+        sm_name = sm.get_fname()
+
+        unreal.log("{}: {}".format(num_of_actors, sm_name))
+
+        num_of_actors += 1
+
+    unreal.log("Documented {} of static mesh references.".format(num_of_actors))
+
+    # -----------------------------------------------------------
+    # LOG STATIC MESH COMPONENTS )))))))))))))))))))))))))))} END
     # -----------------------------------------------------------
