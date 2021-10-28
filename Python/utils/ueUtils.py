@@ -120,7 +120,7 @@ def rename_assets(search_pattern, replaced_pattern, case_sensitivity=True):
     unreal.log("Renamed {}/{} assets".format(replaced_assets, num_of_assets))
 
     # -----------------------------------------------------------
-    # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))} END
+    # REPLACE SELECTED ACTORS ))))))))))))))))))))))))))))))) END
     # -----------------------------------------------------------
 
 
@@ -194,17 +194,17 @@ def org_world_outliner():
     unreal.log("Moved {} actors into folders.".format(moved_actors))
 
     # -----------------------------------------------------------
-    # ORGANIZE WORLD OUTLINER ))))))))))))))))))))))))))))))} END
+    # ORGANIZE WORLD OUTLINER ))))))))))))))))))))))))))))))) END
     # -----------------------------------------------------------
 
 
 
-def log_sm_components():
+def log_bp_components():
     # -----------------------------------------------------------
-    # LOG STATIC MESH COMPONENTS )))))))))))))))))))))))))) START
+    # LOG BP COMPONENTS ))))))))))))))))))))))))))))))))))) START
     # -----------------------------------------------------------
     r"""
-        Access static meshes within filtered actors and log names.
+        Access components within selected blueprint actors.
 
         Args:
             None
@@ -213,38 +213,39 @@ def log_sm_components():
             None
     """
 
-    # Access UE's Editor Level & Filter Libraries to access level
-    # content.
+    # Access UE's Editor Level Library to access level content.
     editor_level_lib = unreal.EditorLevelLibrary()
-    editor_filter_lib = unreal.EditorFilterLibrary()
 
-    # Retrieve all actors in current level; store in array.
-    actors = editor_level_lib.get_all_level_actors()
+    # Retrieve selected bp actors in current level; store in array.
+    bp_actors = editor_level_lib.get_selected_level_actors()
 
-    # Isolate and store only static mesh actors.
-    #static_mesh_actors = editor_filter_lib.by_class(actors, unreal.StaticMeshActor)
-    static_mesh_actors = editor_filter_lib.by_id_name(actors, "Wall", string_match=unreal.EditorScriptingStringMatchType.CONTAINS)
-
-    # Counter to track identified actors.
+    # Counter to track identified actors and children.
     num_of_actors = 0
 
     # Iterate thru each static mesh actor.
-    for actor in static_mesh_actors:
-        #
-        sm_component = actor.static_mesh_component
-        sm = sm_component.static_mesh
-        # The ".static_mesh" object is returned, such as:
-        #   <Object '/Game/Geometry/Meshes/1M_Cube.1M_Cube' (0x0000021A400C2800) Class 'StaticMesh'>
-        # Use unreal._ObjectBase Library to get name, which returns:
-        #   1M_Cube
-        sm_name = sm.get_fname()
+    for actor in bp_actors:
+        # Get root component property for current actor.
+        scene_component = actor.root_component
+        # Get all children within current bp.
+        children = scene_component.get_children_components(True)
+        # Get num of children for current root scene component.
+        # Note that this number includes itself as array item 0.
+        num_of_children = len(children)
+        # Alt built-in method in scene component class to log
+        # num of children.
+        alt_num_of_children = scene_component.get_num_children_components()
+        current_child = 0
 
-        unreal.log("{}: {}".format(num_of_actors, sm_name))
+        # Iterate through each child component.
+        for child in children:
+            child_name = child.get_fname()
+            current_child += 1
+            unreal.log("{}: {}".format(current_child, child_name))
 
         num_of_actors += 1
 
-    unreal.log("Documented {} of static mesh references.".format(num_of_actors))
+        unreal.log("Documented {} ({}) children.".format(num_of_children, alt_num_of_children))
 
     # -----------------------------------------------------------
-    # LOG STATIC MESH COMPONENTS )))))))))))))))))))))))))))} END
+    # LOG BP COMPONENTS ))))))))))))))))))))))))))))))))))))) END
     # -----------------------------------------------------------
