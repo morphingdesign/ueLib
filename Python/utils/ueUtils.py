@@ -216,6 +216,8 @@ def log_bp_components():
     # Access UE's Editor Level Library to access level content.
     editor_level_lib = unreal.EditorLevelLibrary()
 
+    editor_filter_lib = unreal.EditorFilterLibrary()
+
     # Retrieve selected bp actors in current level; store in array.
     bp_actors = editor_level_lib.get_selected_level_actors()
 
@@ -224,6 +226,7 @@ def log_bp_components():
 
     # Iterate thru each static mesh actor.
     for actor in bp_actors:
+        # --------------------------------------- 0
         # Get root component property for current actor.
         scene_component = actor.root_component
         # Get all children within current bp.
@@ -236,15 +239,28 @@ def log_bp_components():
         alt_num_of_children = scene_component.get_num_children_components()
         current_child = 0
 
+        sm_children = editor_filter_lib.by_class(children, unreal.StaticMeshComponent)
+        # The above returns all sm components, including hism.
+        hism_children = editor_filter_lib.by_class(children, unreal.HierarchicalInstancedStaticMeshComponent)
+
+        unreal.log("HISM: {}".format(hism_children))
+        num_of_sm_children = len(sm_children)
+
         # Iterate through each child component.
-        for child in children:
+        for child in sm_children:
+            # --------------------------------------- 1
             child_name = child.get_fname()
+            child_class = child.get_class()
+
             current_child += 1
-            unreal.log("{}: {}".format(current_child, child_name))
+
+            unreal.log("{}: {}, \n\t {}".format(current_child, child_name, child_class))
+            # --------------------------------------- 1
 
         num_of_actors += 1
 
-        unreal.log("Documented {} ({}) children.".format(num_of_children, alt_num_of_children))
+        unreal.log("Documented {} static mesh components from {} ({}) total children.".format(num_of_sm_children, num_of_children, alt_num_of_children))
+        # --------------------------------------- 0
 
     # -----------------------------------------------------------
     # LOG BP COMPONENTS ))))))))))))))))))))))))))))))))))))) END
