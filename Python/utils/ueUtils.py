@@ -241,6 +241,8 @@ def log_bp_components():
 
         sm_children = editor_filter_lib.by_class(children, unreal.StaticMeshComponent)
         # The above returns all sm components, including hism.
+        # Identify array of only hism children, to be used to filter
+        # out hism from sm array.
         hism_children = editor_filter_lib.by_class(children, unreal.HierarchicalInstancedStaticMeshComponent)
 
         unreal.log("HISM: {}".format(hism_children))
@@ -252,14 +254,18 @@ def log_bp_components():
             child_name = child.get_fname()
             child_class = child.get_class()
 
-            current_child += 1
+            # Check if current sm child is not an hism. Process
+            # only if not an hism.
+            if child not in hism_children:
 
-            unreal.log("{}: {}, \n\t {}".format(current_child, child_name, child_class))
+                current_child += 1
+
+                unreal.log("{}: {}, \n\t {}".format(current_child, child_name, child_class))
             # --------------------------------------- 1
 
         num_of_actors += 1
 
-        unreal.log("Documented {} static mesh components from {} ({}) total children.".format(num_of_sm_children, num_of_children, alt_num_of_children))
+        unreal.log("Documented {} static mesh components from {} ({}) total children.".format(current_child, num_of_children, alt_num_of_children))
         # --------------------------------------- 0
 
     # -----------------------------------------------------------
