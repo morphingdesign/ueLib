@@ -260,7 +260,7 @@ def log_bp_components():
 
                 current_child += 1
 
-                unreal.log("{}: {}, \n\t {}".format(current_child, child_name, child_class))
+                unreal.log("{}: {}".format(current_child, child_name))
             # --------------------------------------- 1
 
         num_of_actors += 1
@@ -271,3 +271,37 @@ def log_bp_components():
     # -----------------------------------------------------------
     # LOG BP COMPONENTS ))))))))))))))))))))))))))))))))))))) END
     # -----------------------------------------------------------
+
+def add_component():
+    # Access UE's Editor Level Library to access level content.
+    editor_level_lib = unreal.EditorLevelLibrary()
+    editor_util_lib = unreal.EditorUtilityLibrary()
+
+    #actor = unreal.EditorLevelLibrary.get_selected_level_actors()[0]
+    actor = editor_level_lib.get_selected_level_actors()[0]
+    #asset = editor_util_lib.get_selected_assets()[0]
+    hism_component = unreal.HierarchicalInstancedStaticMeshComponent()
+
+    #inst_name = unreal.Name()
+    #unreal.log("{}".format(inst_name))
+    # Returns 'None'
+
+    unreal.log("{} \n {}".format(actor, hism_component))
+
+    # Init transform object to 0 location, 0 rotation, 1 scale
+    xform = unreal.Transform()
+    #unreal.log(xform)
+
+    unreal.uproperty(unreal.InstancedStaticMeshComponent())
+
+
+    hism_component.attach_to_component(actor.root_component,
+                                       unreal.Name(),
+                                       unreal.AttachmentRule.KEEP_WORLD,
+                                       unreal.AttachmentRule.KEEP_WORLD,
+                                       unreal.AttachmentRule.KEEP_WORLD,
+                                       False)
+
+    hism_component.add_instance(xform)
+
+    #actor.set_editor_property('root_component', instance_component)
