@@ -273,13 +273,25 @@ def log_bp_components():
     # -----------------------------------------------------------
 
 def add_component():
+    # -----------------------------------------------------------
+    # ADD COMPONENTS )))))))))))))))))))))))))))))))))))))) START
+    # -----------------------------------------------------------
+    r"""
+        Add component within selected blueprint actors.
+
+        Args:
+            None
+
+        Returns:
+            None
+    """
     # Access UE's Editor Level Library to access level content.
     editor_level_lib = unreal.EditorLevelLibrary()
     editor_util_lib = unreal.EditorUtilityLibrary()
 
     #actor = unreal.EditorLevelLibrary.get_selected_level_actors()[0]
     actor = editor_level_lib.get_selected_level_actors()[0]
-    #asset = editor_util_lib.get_selected_assets()[0]
+    asset = editor_util_lib.get_selected_assets()[0]
     hism_component = unreal.HierarchicalInstancedStaticMeshComponent()
 
     #inst_name = unreal.Name()
@@ -302,6 +314,16 @@ def add_component():
                                        unreal.AttachmentRule.KEEP_WORLD,
                                        False)
 
-    hism_component.add_instance(xform)
+    #hism_component.add_instance(xform)
 
-    #actor.set_editor_property('root_component', instance_component)
+    #hism_component.set_static_mesh(asset)
+
+    actor.set_editor_property('root_component', hism_component)
+
+    # Outputs the following when run in Editor:
+    # <Object '/Game/ThirdPersonBP/Maps/ThirdPersonExampleMap.ThirdPersonExampleMap:PersistentLevel.BP_New_2' (0x000001919241A500) Class 'BP_New_C'>
+    #  <Object '/Engine/Transient.HierarchicalInstancedStaticMeshComponent_1' (0x000001913BA4D600) Class 'HierarchicalInstancedStaticMeshComponent'>
+
+    # -----------------------------------------------------------
+    # ADD COMPONENTS )))))))))))))))))))))))))))))))))))))))) END
+    # -----------------------------------------------------------
