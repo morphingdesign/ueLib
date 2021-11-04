@@ -8,13 +8,29 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/HierarchicalInstancedStaticMeshComponent.h"
 
+// Verify that only a single 'generated.h' file ends this list.
 #include "NewActor.generated.h"
 
 UCLASS()
 class SANDBOX_CPP_V4271_API ANewActor : public AActor
 {
     GENERATED_BODY()
+
+// Verify all properties and functions have a category defined for organization.
+public:
+    // VARIABLES
+
+    // Bool variable for toggling event from Details panel in Editor.
+    UPROPERTY(EditAnywhere, Category = "Actor Setup")
+    bool clearStaticMeshes = false;
+
+    // FUNCTIONS
+
+    // Evaluate condition of clearStaticMeshes bool state.
+    UFUNCTION(BlueprintCallable, Category = "HansFunctions")
+    void ZTestFuncA();
 
 public:
     // Sets default values for this actor's properties

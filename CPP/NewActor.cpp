@@ -32,3 +32,13 @@ void ANewActor::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
 }
+
+// ZTestFuncA
+// Check state of bool variable.
+void ANewActor::ZTestFuncA()
+{
+    if (clearStaticMeshes)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Clear Static Meshes is enabled."));
+    }
+}
