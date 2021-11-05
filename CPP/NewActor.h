@@ -37,6 +37,9 @@ public:
     ANewActor();
 
 public:
+    // Called when class instance is placed in editor or spawned.
+    // It also triggers each time the instance is edited in the editor, which can
+    // lead to repeat events.
     virtual void OnConstruction();
 
 protected:
@@ -46,5 +49,11 @@ protected:
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
+
+public:
+    // Called after components in array are registered.
+    // Can be a potential state for clearing out static mesh components
+    // intended to be discarded after conversion.
+    virtual void PostRegisterAllComponents() override;
 
 };

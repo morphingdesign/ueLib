@@ -16,13 +16,19 @@ ANewActor::ANewActor()
 
 void ANewActor::OnConstruction()
 {
-    ZTestFuncC();
+    ZTestFuncA();
 }
 
 // Called when the game starts or when spawned
 void ANewActor::BeginPlay()
 {
     Super::BeginPlay();
+
+}
+
+void ANewActor::PostRegisterAllComponents()
+{
+    UE_LOG(LogTemp, Warning, TEXT("Post register all components."));
 
 }
 
