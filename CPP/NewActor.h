@@ -28,9 +28,14 @@ public:
 
     // FUNCTIONS
 
-    // Evaluate condition of clearStaticMeshes bool state.
     UFUNCTION(BlueprintCallable, Category = "HansFunctions")
-    void ZTestFuncA();
+    void ZTestFuncA(UHierarchicalInstancedStaticMeshComponent*& NewHISM, FName Name);
+
+    //UFUNCTION(BlueprintCallable, Category = "HansFunctions")
+    //void ZTestFuncC();
+
+public:
+    void ZTestFuncC();
 
 public:
     // Sets default values for this actor's properties

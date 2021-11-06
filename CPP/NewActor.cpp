@@ -16,7 +16,7 @@ ANewActor::ANewActor()
 
 void ANewActor::OnConstruction()
 {
-    ZTestFuncA();
+    //ZTestFuncC();
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +28,7 @@ void ANewActor::BeginPlay()
 
 void ANewActor::PostRegisterAllComponents()
 {
+    ZTestFuncC();
     UE_LOG(LogTemp, Warning, TEXT("Post register all components."));
 
 }
@@ -40,9 +41,21 @@ void ANewActor::Tick(float DeltaTime)
 }
 
 // ZTestFuncA
-// Check state of bool variable.
-void ANewActor::ZTestFuncA()
+// Convert static mesh components to HISMs, including registering and parenting.
+void ANewActor::ZTestFuncA(UHierarchicalInstancedStaticMeshComponent*& NewHISM, FName Name)
 {
+    UHierarchicalInstancedStaticMeshComponent* HISM;
+    NewHISM = NewObject<UHierarchicalInstancedStaticMeshComponent>(this, HISM->StaticClass(), Name);
+    NewHISM->SetupAttachment(RootComponent);
+    NewHISM->RegisterComponent();
+    AddInstanceComponent(NewHISM);
+    NewHISM->SetFlags(RF_Transactional);
+}
+
+// ZTestFuncC
+// Intended to clear static meshes when enabled by user.
+void ANewActor::ZTestFuncC() {
+}
     if (clearStaticMeshes)
     {
         UE_LOG(LogTemp, Warning, TEXT("Clear Static Meshes is enabled."));
