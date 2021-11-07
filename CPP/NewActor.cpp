@@ -1,7 +1,7 @@
 // -----------------------------------------------------------
 // NewActor.cpp
 // v.1.0
-// Updated: 20211103
+// Updated: 20211107
 // -----------------------------------------------------------
 
 #include "NewActor.h"
@@ -54,10 +54,31 @@ void ANewActor::ZTestFuncA(UHierarchicalInstancedStaticMeshComponent*& NewHISM, 
 
 // ZTestFuncC
 // Intended to clear static meshes when enabled by user.
-void ANewActor::ZTestFuncC() {
-}
+void ANewActor::ZTestFuncC()
+{
     if (clearStaticMeshes)
     {
         UE_LOG(LogTemp, Warning, TEXT("Clear Static Meshes is enabled."));
+    }
+    // Filter all components in actor to collect only static
+    // meshes. Verify no HISM (child class) are included.
+    // Detach from actor.
+    // Destroy actors.
+
+    TArray<UStaticMeshComponent*> StaticComps;
+    GetComponents<UStaticMeshComponent>(StaticComps);
+
+    //for (UStaticMeshComponent StComp : StaticComps)
+    //{
+    //	FString Name = GetName(StComp);
+    //	UE_LOG(LogTemp, Warning, TEXT(Name));
+    //}
+
+    for (int32 i = 0; i < StaticComps.Num(); i++)
+    {
+        //AActor::GetName(StaticComps[i]).ToString();
+        //UE_LOG(LogTemp, Warning, TEXT("test"));
+        //UE_LOG(LogTemp, Warning, TEXT(StaticComps[i]->GetName.ToString()));
+        // StaticComps[i]->GetName
     }
 }
