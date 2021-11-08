@@ -1,7 +1,7 @@
 # -----------------------------------------------------------
 # ueUtils.py
 # v.1.0
-# Updated: 20211102
+# Updated: 20211108
 # -----------------------------------------------------------
 
 import unreal
@@ -291,27 +291,24 @@ def add_component():
         Returns:
             None
     """
+
+    # !!!!!!!!!!!! NOTE !!!!!!!!!!!!!!!
+    # This function superseded by new actor class and function via C++.
+
     # Access UE's Editor Level Library to access level content.
     editor_level_lib = unreal.EditorLevelLibrary()
     editor_util_lib = unreal.EditorUtilityLibrary()
 
-    #actor = unreal.EditorLevelLibrary.get_selected_level_actors()[0]
     actor = editor_level_lib.get_selected_level_actors()[0]
     asset = editor_util_lib.get_selected_assets()[0]
     hism_component = unreal.HierarchicalInstancedStaticMeshComponent()
-
-    #inst_name = unreal.Name()
-    #unreal.log("{}".format(inst_name))
-    # Returns 'None'
 
     unreal.log("{} \n {}".format(actor, hism_component))
 
     # Init transform object to 0 location, 0 rotation, 1 scale
     xform = unreal.Transform()
-    #unreal.log(xform)
 
     unreal.uproperty(unreal.InstancedStaticMeshComponent())
-
 
     hism_component.attach_to_component(actor.root_component,
                                        unreal.Name(),
@@ -320,15 +317,7 @@ def add_component():
                                        unreal.AttachmentRule.KEEP_WORLD,
                                        False)
 
-    #hism_component.add_instance(xform)
-
-    #hism_component.set_static_mesh(asset)
-
     actor.set_editor_property('root_component', hism_component)
-
-    # Outputs the following when run in Editor:
-    # <Object '/Game/ThirdPersonBP/Maps/ThirdPersonExampleMap.ThirdPersonExampleMap:PersistentLevel.BP_New_2' (0x000001919241A500) Class 'BP_New_C'>
-    #  <Object '/Engine/Transient.HierarchicalInstancedStaticMeshComponent_1' (0x000001913BA4D600) Class 'HierarchicalInstancedStaticMeshComponent'>
 
     # -----------------------------------------------------------
     # ADD COMPONENTS )))))))))))))))))))))))))))))))))))))))) END
